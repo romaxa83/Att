@@ -15,6 +15,8 @@ up: docker_up info
 restart: down build up info
 init: down build docker_up info
 test: test_run
+sync: sync_data
+
 
 #==========COMMAND==================================================
 
@@ -27,8 +29,8 @@ docker_up:
 down:
 	docker-compose down --remove-orphans #очистит все запущеные контейнеры
 
-cp_env:
-	cp .env.example .env
+sync_data:
+	docker-compose exec $(php_container) php artisan sync:data
 
 permission:
 	sudo chmod 777 -R -f vendor/
@@ -40,12 +42,7 @@ app_init:
 	docker-compose exec $(php_container) php artisan key:generate
 	docker-compose exec $(php_container) php artisan migrate
 	docker-compose exec $(php_container) php artisan db:seed
-	docker-compose exec $(php_container) php artisan jd:create:admin c
-	docker-compose exec $(php_container) php artisan ide-helper:generate
-	docker-compose exec $(php_container) php artisan ide-helper:meta
-	docker-compose exec $(php_container) php artisan passport:install
-	docker-compose exec $(php_container) php artisan jd:import:all
-	docker-compose exec $(php_container) php artisan jd:fill-feature
+# 	docker-compose exec $(php_container) php artisan sync:data
 
 info:
 	echo "$(site)"

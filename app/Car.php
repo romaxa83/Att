@@ -12,6 +12,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $number
  * @property string $vin_code
  * @property string $color
+ * @property string $year
+ * @property int $manufacture_id
+ * @property int $model_id
  * @property string $created_at
  * @property string $updated_at
  */
@@ -29,5 +32,15 @@ class Car extends Model
     public static function fields()
     {
         return ['id', 'name', 'number', 'color', 'vin_code', 'created_at', 'updated_at'];
+    }
+
+    public function model()
+    {
+        return $this->hasOne(\App\Model::class, 'model_id', 'model_id');
+    }
+
+    public function manufacture()
+    {
+        return $this->hasOne(\App\Manufacture::class, 'make_id', 'manufacture_id');
     }
 }
