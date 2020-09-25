@@ -9,7 +9,8 @@ make init (для докера развернет окружение)
 composer install
 php artisan key:generate
 php artisan migrate
-php artisan sync:data
+sudo chmod 777 -R storage/
+php artisan sync:data (запускает импорт данных)
 ```
 
 
