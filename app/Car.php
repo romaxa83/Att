@@ -25,4 +25,9 @@ class Car extends Model
     protected $fillable = [
         'name', 'number', 'color', 'vin_code'
     ];
+
+    public static function fields()
+    {
+        return ['id', 'name', 'number', 'color', 'vin_code', 'created_at', 'updated_at'];
+    }
 }

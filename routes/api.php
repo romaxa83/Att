@@ -22,6 +22,8 @@ Route::put('cars/{car}', [CarController::class, 'update'])->name('car.update');
 Route::delete('cars/{car}', [CarController::class, 'remove'])->name('car.remove');
 Route::post('cars', [CarController::class, 'create'])->name('car.create');
 
+Route::get('search', [CarController::class, 'search'])->name('cars.search');
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });

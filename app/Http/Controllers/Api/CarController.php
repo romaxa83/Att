@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Car;
 use App\Http\Requests\CarCreateRequest;
+use App\Http\Requests\CarSearchRequest;
 use App\Http\Requests\CarUpdateRequest;
 use App\Repositories\CarRepository;
 use App\Resources\CarResource;
@@ -81,6 +82,18 @@ class CarController extends ApiController
             $this->carService->remove($car);
 
             return $this->successJsonMessage('Модель удалена');
+        } catch (\Exception $error){
+            return $this->errorJsonMessage($error->getMessage());
+        }
+    }
+
+    public function search(CarSearchRequest $request)
+    {
+        try {
+
+            $cars = $this->carRepository->search($request->input('query'));
+
+            return CarResource::collection($cars);
         } catch (\Exception $error){
             return $this->errorJsonMessage($error->getMessage());
         }
