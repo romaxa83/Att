@@ -5,6 +5,8 @@
 /storage/db/
 /vendor
 .env
+.idea/
+/docker/storage/
 .env.backup
 .phpunit.result.cache
 Homestead.json

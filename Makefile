@@ -13,7 +13,7 @@ web_container = web
 
 up: docker_up info
 restart: down build up info
-init: down build docker_up info
+init: down cp-env build docker_up app_init info
 test: test_run
 sync: sync_data
 
@@ -46,10 +46,9 @@ app_init:
 
 info:
 	echo "$(site)"
-	echo "API - $(site)/api/documentation"
 
-test-run:
-	docker-compose exec $(php_container) php ./vendor/bin/phpunit
+cp-env:
+	cp .env.example .env
 
 api_docs:
 	docker-compose exec $(php_container) php artisan l5-swagger:generate
