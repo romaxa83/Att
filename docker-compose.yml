@@ -1,0 +1,71 @@
+version: '3'
+
+services:
+  web:
+    image: webdevops/apache:alpine
+    container_name: ${APP_NAME}_web
+    hostname: ${APP_NAME}_web
+    environment:
+      WEB_DOCUMENT_ROOT: /app/public
+      WEB_PHP_SOCKET: ${APP_NAME}_php:9000
+      LOG_STDOUT: /app/storage/logs/web.access.log
+      LOG_STDERR: /app/storage/logs/web.errors.log
+    ports:
+      - ${DOCKER_BRIDGE}:80:80
+    volumes:
+      - ./:/app:rw,cached
+    working_dir: /app
+    depends_on:
+      - php
+    restart: always
+
+  php:
+    build:
+      context: ./
+      dockerfile: docker/config/php/Dockerfile
+    container_name: ${APP_NAME}_php
+    hostname: ${APP_NAME}_php
+    volumes:
+      - ./:/app:rw,cached
+      - ./docker/config/php/.bashrc:/root/.bashrc
+      - ./docker/config/php/.bash_aliases:/root/.bash_aliases
+    working_dir: /app
+    environment:
+      TERM: xterm-256color
+      COMPOSER_ALLOW_SUPERUSER: 1
+      XDEBUG_CONFIG: "remote_host=${DOCKER_BRIDGE} remote_enable=1"
+      PHP_IDE_CONFIG: "serverName=Docker"
+    restart: always
+    depends_on:
+      - db
+
+  db:
+    image: mysql:5.7
+    container_name: ${APP_NAME}_db
+    hostname: ${APP_NAME}_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: root
+      MYSQL_DATABASE: att_db
+    ports:
+      - ${DOCKER_BRIDGE}:3306:3306
+    volumes:
+      - ./storage/db/mysql:/var/lib/mysql
+
+  node:
+    image: node:8-slim
+    restart: always
+    container_name: ${APP_NAME}_node
+    hostname: ${APP_NAME}_node
+    working_dir: /app
+    volumes:
+      - ./:/app:rw,cached
+    tty: true
+
+networks:
+  default:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: ${DOCKER_NETWORK}
