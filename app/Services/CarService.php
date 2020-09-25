@@ -12,13 +12,16 @@ class CarService
      * @param CarCreateRequest $request
      * @return Car
      */
-    public function create(CarCreateRequest $request): Car
+    public function create(CarCreateRequest $request, $decodeData): Car
     {
         $model = new Car();
         $model->name = $request->input('name');
         $model->number = $request->input('number');
         $model->vin_code = $request->input('vin_code');
         $model->color = $request->input('color');
+        $model->manufacture_id = $decodeData['manufacture_id'];
+        $model->model_id = $decodeData['model_id'];
+        $model->year = $decodeData['year'];
         $model->save();
 
         return $model;

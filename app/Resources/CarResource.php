@@ -18,6 +18,9 @@ class CarResource extends JsonResource
             'name' => $car->name,
             'number' => $car->number,
             'color' => $car->color,
+            'year' => $car->year,
+            'model' => $car->model->name,
+            'manufacture' => $car->manufacture->name,
             'created' => DateFormat::front($car->created_at),
             'updated' => DateFormat::front($car->updated_at),
         ];
