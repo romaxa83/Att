@@ -13,7 +13,7 @@ web_container = web
 
 up: docker_up info
 restart: down build up info
-init: down cp-env build docker_up app_init info
+init: down build docker_up info
 test: test_run
 sync: sync_data
 
